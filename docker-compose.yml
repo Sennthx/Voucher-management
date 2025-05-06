@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    container_name: voucher_db
+    environment:
+      POSTGRES_DB: voucherdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: voucher_app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/voucherdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: your_password
+
+volumes:
+  pgdata:
