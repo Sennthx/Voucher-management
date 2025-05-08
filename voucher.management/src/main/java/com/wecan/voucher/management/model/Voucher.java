@@ -139,4 +139,20 @@ public class Voucher {
         this.validTo = validTo;
     }
     // --------------------------------------------------------------------
+
+
+    @Override
+    public String toString() {
+        return "Voucher{" +
+                "code='" + code + '\'' +
+                ", id=" + id +
+                ", type=" + type +
+                ", redemptionLimit=" + redemptionLimit +
+                ", validFrom=" + validFrom +
+                ", validTo=" + validTo +
+                ", discountValue=" + discountValue +
+                ", discountType=" + discountType +
+                ", redemptions=" + redemptions +
+                '}';
+    }
 }

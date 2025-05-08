@@ -21,8 +21,6 @@ public class Redemption {
     @Column(nullable = false, length = 45)
     private String redeemerIp;
 
-    @Column(length = 500)
-    private String userAgent;
 
     public Redemption() {}
 
@@ -30,10 +28,9 @@ public class Redemption {
         this.voucher = voucher;
     }
 
-    public Redemption(Instant redeemedAt, String redeemerIp, String userAgent, Voucher voucher) {
+    public Redemption(Instant redeemedAt, String redeemerIp, Voucher voucher) {
         this.redeemedAt = redeemedAt;
         this.redeemerIp = redeemerIp;
-        this.userAgent = userAgent;
         this.voucher = voucher;
     }
 
@@ -48,10 +45,6 @@ public class Redemption {
 
     public String getRedeemerIp() {
         return redeemerIp;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
     }
 
     public Voucher getVoucher() {
@@ -72,12 +65,19 @@ public class Redemption {
         this.redeemerIp = redeemerIp;
     }
 
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
-    }
-
     public void setVoucher(Voucher voucher) {
         this.voucher = voucher;
     }
     // --------------------------------------------------------------------
+
+
+    @Override
+    public String toString() {
+        return "Redemption{" +
+                "id=" + id +
+                ", voucher=" + voucher +
+                ", redeemedAt=" + redeemedAt +
+                ", redeemerIp='" + redeemerIp + '\'' +
+                '}';
+    }
 }
