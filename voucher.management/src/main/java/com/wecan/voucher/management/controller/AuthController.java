@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
         boolean isAuthenticated = request.username().equals(adminConfig.username()) &&
-                passwordEncoder.matches("teszt", adminConfig.password());
+                passwordEncoder.matches(request.password(), adminConfig.password());
 
         if (isAuthenticated) {
             String token = jwtService.generateToken(request.username());
@@ -38,6 +38,6 @@ public class AuthController {
                     "role", "ADMIN"
             ));
         }
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(401).body(Map.of("error", "Invalid username or password"));
     }
 }
