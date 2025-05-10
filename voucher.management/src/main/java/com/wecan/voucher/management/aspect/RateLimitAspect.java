@@ -15,13 +15,14 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Component
 public class RateLimitAspect {
+
     private final HttpServletRequest request;
-    private final Cache<String, Integer> requestCounts;
+    private final Cache<String, RequestRecord> requestCounts;
 
     public RateLimitAspect(HttpServletRequest request) {
         this.request = request;
         this.requestCounts = Caffeine.newBuilder()
-                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .expireAfterWrite(10, TimeUnit.MINUTES) // long enough, actual window checked manually
                 .build();
     }
 
@@ -29,14 +30,26 @@ public class RateLimitAspect {
     public Object rateLimit(ProceedingJoinPoint joinPoint, RateLimited rateLimited) throws Throwable {
         String ip = request.getRemoteAddr();
         int limit = rateLimited.requests();
-        int window = rateLimited.seconds();
+        int windowSeconds = rateLimited.seconds();
 
-        Integer count = requestCounts.get(ip, k -> 0);
-        if (count >= limit) {
+        long now = System.currentTimeMillis();
+
+        RequestRecord record = requestCounts.get(ip, k -> new RequestRecord(0, now));
+
+        if (now - record.firstRequestTime() > windowSeconds * 1000L) {
+            // Window expired -> reset count
+            record = new RequestRecord(1, now);
+        } else if (record.count() >= limit) {
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
-                    String.format("Rate limit exceeded - %d requests per %d seconds", limit, window));
+                    String.format("Rate limit exceeded - %d requests per %d seconds", limit, windowSeconds));
+        } else {
+            // Increment count
+            record = new RequestRecord(record.count() + 1, record.firstRequestTime());
         }
-        requestCounts.put(ip, count + 1);
+
+        requestCounts.put(ip, record);
         return joinPoint.proceed();
     }
+
+    private record RequestRecord(int count, long firstRequestTime) {}
 }
