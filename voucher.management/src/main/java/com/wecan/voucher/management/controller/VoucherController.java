@@ -4,7 +4,6 @@
     import com.wecan.voucher.management.dto.request.RedemptionRequest;
     import com.wecan.voucher.management.dto.request.VoucherRequest;
     import com.wecan.voucher.management.dto.response.RedemptionResponse;
-    import com.wecan.voucher.management.dto.response.VoucherValidationResponse;
     import com.wecan.voucher.management.model.Redemption;
     import com.wecan.voucher.management.model.Voucher;
     import com.wecan.voucher.management.service.VoucherService;
