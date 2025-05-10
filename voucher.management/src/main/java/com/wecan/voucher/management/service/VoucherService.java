@@ -15,9 +15,6 @@ public interface VoucherService {
     List<Voucher> getAllVouchers();
     void deleteVoucher(Long id);
 
-
-    VoucherValidationResponse validateVoucher(String code);
-
     Redemption redeemVoucher(@Valid RedemptionRequest redemptionRequest, String remoteAddr);
 
     // More: update, redeem, validate, etc.

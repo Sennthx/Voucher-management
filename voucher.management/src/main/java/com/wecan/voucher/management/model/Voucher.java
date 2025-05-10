@@ -37,7 +37,7 @@ public class Voucher {
     @NotNull(message = "Discount value is required")
     @Positive(message = "Discount value must be positive")
     @Column(nullable = false)
-    private BigDecimal discountValue;
+    private Integer discountValue;
 
     @NotNull(message = "Discount type is required (FIXED or PERCENTAGE)")
     @Enumerated(EnumType.STRING)
@@ -57,14 +57,14 @@ public class Voucher {
 
     public Voucher() {}
 
-    public Voucher(String code, BigDecimal discountValue) {
+    public Voucher(String code, Integer discountValue) {
         this.code = code;
         this.discountValue = discountValue;
         this.validFrom = Instant.now();
     }
 
     public Voucher(String code, VoucherType type, Integer redemptionLimit,
-                   Instant validFrom, Instant validTo, BigDecimal discountValue,
+                   Instant validFrom, Instant validTo, Integer discountValue,
                    DiscountType discountType) {
         this.code = code;
         this.type = type;
@@ -84,7 +84,7 @@ public class Voucher {
         return discountType;
     }
 
-    public BigDecimal getDiscountValue() {
+    public Integer getDiscountValue() {
         return discountValue;
     }
 
@@ -122,7 +122,7 @@ public class Voucher {
         this.discountType = discountType;
     }
 
-    public void setDiscountValue(BigDecimal discountValue) {
+    public void setDiscountValue(Integer discountValue) {
         this.discountValue = discountValue;
     }
 

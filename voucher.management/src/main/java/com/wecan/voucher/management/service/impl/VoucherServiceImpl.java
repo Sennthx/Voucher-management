@@ -26,6 +26,11 @@ public class VoucherServiceImpl implements VoucherService {
         if (voucherRepository.findByCode(voucher.getCode()).isPresent()) {
             throw new DuplicateResourceException("code", "Voucher with this code already exists");
         }
+
+        if (voucher.getType() == Voucher.VoucherType.SINGLE) {
+            voucher.setRedemptionLimit(1);
+        }
+
         return voucherRepository.save(voucher);
     }
 
@@ -44,10 +49,6 @@ public class VoucherServiceImpl implements VoucherService {
         voucherRepository.deleteById(id);
     }
 
-    @Override
-    public VoucherValidationResponse validateVoucher(String code) {
-        return null;
-    }
 
     @Override
     public Redemption redeemVoucher(RedemptionRequest redemptionRequest, String remoteAddr) {
