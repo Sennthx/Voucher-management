@@ -45,7 +45,7 @@
         }
 
         @PostMapping("/redeem")
-        @RateLimited(value = 1, window = 5)
+        @RateLimited(requests = 1, seconds = 5)
         public ResponseEntity<RedemptionResponse> redeemVoucher(
                 @RequestBody @Valid RedemptionRequest redemptionRequest,
                 HttpServletRequest request) {

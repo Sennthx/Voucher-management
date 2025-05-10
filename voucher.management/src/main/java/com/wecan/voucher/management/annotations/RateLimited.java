@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimited {
     // Optional: Add configurable properties
-    int value() default 10;        // Default: 10 requests
-    int window() default 60;       // Default: 60 seconds
+    int requests() default 10;        // Default: 10 requests
+    int seconds() default 60;       // Default: 60 seconds
 }

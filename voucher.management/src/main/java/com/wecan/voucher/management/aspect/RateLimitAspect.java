@@ -28,8 +28,8 @@ public class RateLimitAspect {
     @Around("@annotation(rateLimited)")
     public Object rateLimit(ProceedingJoinPoint joinPoint, RateLimited rateLimited) throws Throwable {
         String ip = request.getRemoteAddr();
-        int limit = rateLimited.value();
-        int window = rateLimited.window();
+        int limit = rateLimited.requests();
+        int window = rateLimited.seconds();
 
         Integer count = requestCounts.get(ip, k -> 0);
         if (count >= limit) {
