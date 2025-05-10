@@ -63,11 +63,5 @@
             ));
         }
 
-        @GetMapping("/validate/{code}")
-        public ResponseEntity<VoucherValidationResponse> validateVoucher(
-                @PathVariable String code) {
-            // No changes needed - public endpoint
-            return ResponseEntity.ok(voucherService.validateVoucher(code));
-        }
 
     }
