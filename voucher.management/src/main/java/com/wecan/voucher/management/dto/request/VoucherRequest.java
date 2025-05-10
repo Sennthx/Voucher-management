@@ -1,10 +1,11 @@
 package com.wecan.voucher.management.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wecan.voucher.management.model.Voucher;
 import com.wecan.voucher.management.validation.EnumValidator;
 import com.wecan.voucher.management.validation.ValidVoucherRequest;
 import jakarta.validation.constraints.*;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @ValidVoucherRequest
 public record VoucherRequest(
@@ -21,11 +22,13 @@ public record VoucherRequest(
         @PositiveOrZero(message = "Redemption limit must be ≥ 0")
         Integer redemptionLimit,
 
+        @JsonFormat(pattern = "yyyy-MM-dd")
         @NotNull(message = "Valid-from date is required")
-        Instant validFrom,
+        LocalDate validFrom,
 
+        @JsonFormat(pattern = "yyyy-MM-dd")
         @FutureOrPresent(message = "Valid-to date must be in the future")
-        Instant validTo,
+        LocalDate validTo,
 
         @NotNull(message = "Discount value is required")
         @Positive(message = "Discount value must be > 0")
