@@ -2,6 +2,7 @@ package com.wecan.voucher.management.service.impl;
 
 import com.wecan.voucher.management.dto.request.RedemptionRequest;
 import com.wecan.voucher.management.dto.response.VoucherValidationResponse;
+import com.wecan.voucher.management.exception.DuplicateResourceException;
 import com.wecan.voucher.management.model.Redemption;
 import com.wecan.voucher.management.model.Voucher;
 import com.wecan.voucher.management.repository.VoucherRepository;
@@ -22,6 +23,9 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override
     public Voucher createVoucher(Voucher voucher) {
+        if (voucherRepository.findByCode(voucher.getCode()).isPresent()) {
+            throw new DuplicateResourceException("code", "Voucher with this code already exists");
+        }
         return voucherRepository.save(voucher);
     }
 

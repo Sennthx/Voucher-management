@@ -40,6 +40,7 @@
         }
 
         @GetMapping
+        @RateLimited(requests = 1, seconds = 5)
         public ResponseEntity<List<Voucher>> list() {
             return ResponseEntity.ok(voucherService.getAllVouchers());
         }

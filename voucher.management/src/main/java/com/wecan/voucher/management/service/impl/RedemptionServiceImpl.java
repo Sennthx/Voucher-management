@@ -1,5 +1,6 @@
 package com.wecan.voucher.management.service.impl;
 
+import com.wecan.voucher.management.exception.ResourceNotFoundException;
 import com.wecan.voucher.management.model.Redemption;
 import com.wecan.voucher.management.model.Voucher;
 import com.wecan.voucher.management.repository.RedemptionRepository;
@@ -24,9 +25,7 @@ public class RedemptionServiceImpl implements RedemptionService {
     @Override
     public Redemption redeemVoucher(Long voucherId, String ip, String userAgent) {
         Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new RuntimeException("Voucher not found"));
-
-        // Validation rules can go here (e.g., check if expired, limit reached, etc.)
+                .orElseThrow(() -> new ResourceNotFoundException("voucher", "Voucher not found"));
 
         Redemption redemption = new Redemption(Instant.now(), ip, voucher);
         return redemptionRepository.save(redemption);
@@ -35,7 +34,7 @@ public class RedemptionServiceImpl implements RedemptionService {
     @Override
     public List<Redemption> getRedemptionsForVoucher(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new RuntimeException("Voucher not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("voucher", "Voucher not found"));
 
         return redemptionRepository.findByVoucher(voucher);
     }
