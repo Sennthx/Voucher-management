@@ -28,13 +28,13 @@
         @PostMapping
         public ResponseEntity<Voucher> create(@RequestBody @Valid VoucherRequest request) {
             Voucher voucher = new Voucher(
-                    request.code,
-                    Voucher.VoucherType.valueOf(request.type),
-                    request.redemptionLimit,
-                    request.validFrom,
-                    request.validTo,
-                    request.discountValue,
-                    Voucher.DiscountType.valueOf(request.discountType)
+                    request.code(),
+                    Voucher.VoucherType.valueOf(request.type()),
+                    request.redemptionLimit(),
+                    request.validFrom(),
+                    request.validTo(),
+                    request.discountValue(),
+                    Voucher.DiscountType.valueOf(request.discountType())
             );
             return ResponseEntity.ok(voucherService.createVoucher(voucher));
         }

@@ -1,6 +1,8 @@
 package com.wecan.voucher.management.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -12,26 +14,35 @@ public class Voucher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @NotBlank(message = "Voucher code is required")
+    @Size(min = 3, max = 20, message = "Code must be between 3 and 20 characters")
+    @Column(unique = true, nullable = false, length = 20)
     private String code;
 
+    @NotNull(message = "Voucher type is required (SINGLE, MULTIPLE, LIMITED)")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VoucherType type = VoucherType.SINGLE; // SINGLE, MULTIPLE, LIMITED
+    private VoucherType type = VoucherType.SINGLE;
 
+    @PositiveOrZero(message = "Redemption limit must be positive or zero")
     private Integer redemptionLimit; // Only for LIMITED type
 
+    @NotNull(message = "Valid-from date is required")
     @Column(nullable = false)
     private Instant validFrom = Instant.now();
 
+    @FutureOrPresent(message = "Valid-to date must be in the future")
     private Instant validTo;
 
+    @NotNull(message = "Discount value is required")
+    @Positive(message = "Discount value must be positive")
     @Column(nullable = false)
     private BigDecimal discountValue;
 
+    @NotNull(message = "Discount type is required (FIXED or PERCENTAGE)")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DiscountType discountType = DiscountType.FIXED; // FIXED or PERCENTAGE
+    private DiscountType discountType = DiscountType.FIXED;
 
     @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Redemption> redemptions;
