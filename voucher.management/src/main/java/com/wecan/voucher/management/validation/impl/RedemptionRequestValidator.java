@@ -18,16 +18,16 @@ public class RedemptionRequestValidator implements ConstraintValidator<ValidRede
 
         context.disableDefaultConstraintViolation();
 
-        if (request.voucherCode() == null || request.voucherCode().isBlank()) {
+        if (request.code() == null || request.code().isBlank()) {
             context.buildConstraintViolationWithTemplate("Voucher code is required")
-                    .addPropertyNode("voucherCode")
+                    .addPropertyNode("code")
                     .addConstraintViolation();
             return false;
         }
 
-        if (voucherRepository.findByCode(request.voucherCode()).isEmpty()) {
+        if (voucherRepository.findByCode(request.code()).isEmpty()) {
             context.buildConstraintViolationWithTemplate("Invalid or non-existent voucher code")
-                    .addPropertyNode("voucherCode")
+                    .addPropertyNode("code")
                     .addConstraintViolation();
             return false;
         }

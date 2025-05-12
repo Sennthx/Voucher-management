@@ -18,7 +18,6 @@ public class Redemption {
     @Column(nullable = false)
     private LocalDate redeemedAt = LocalDate.now();
 
-
     public Redemption() {}
 
     public Redemption(Voucher voucher) {

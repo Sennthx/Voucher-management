@@ -1,5 +1,6 @@
 package com.wecan.voucher.management.model;
 
+import com.wecan.voucher.management.dto.request.VoucherRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -69,6 +70,18 @@ public class Voucher {
         this.validTo = validTo;
         this.discountValue = discountValue;
         this.discountType = discountType;
+    }
+
+    public static Voucher fromRequest(VoucherRequest request) {
+        return new Voucher(
+                request.code(),
+                Voucher.VoucherType.valueOf(request.type()),
+                request.redemptionLimit(),
+                request.validFrom(),
+                request.validTo(),
+                request.discountValue(),
+                Voucher.DiscountType.valueOf(request.discountType())
+        );
     }
 
     // GETTERS
