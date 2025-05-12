@@ -33,14 +33,18 @@ public class VoucherRequestValidator implements ConstraintValidator<ValidVoucher
             }
         }
 
-        String discountType = request.discountType();
-        Integer discountValue = request.discountValue();
-
-        if ("PERCENTAGE".equalsIgnoreCase(discountType) && discountValue != null) {
-            if (discountValue > 100) {
+        if ("LIMITED".equalsIgnoreCase(type)) {
+            if (request.validFrom() == null) {
                 context.buildConstraintViolationWithTemplate(
-                                "Percentage discount cannot be greater than 100%")
-                        .addPropertyNode("discountValue")
+                                "validFrom is required for LIMITED vouchers")
+                        .addPropertyNode("validFrom")
+                        .addConstraintViolation();
+                valid = false;
+            }
+            if (request.validTo() == null) {
+                context.buildConstraintViolationWithTemplate(
+                                "validTo is required for LIMITED vouchers")
+                        .addPropertyNode("validTo")
                         .addConstraintViolation();
                 valid = false;
             }
@@ -55,6 +59,17 @@ public class VoucherRequestValidator implements ConstraintValidator<ValidVoucher
             valid = false;
         }
 
+        String discountType = request.discountType();
+        Integer discountValue = request.discountValue();
+        if ("PERCENTAGE".equalsIgnoreCase(discountType) && discountValue != null && discountValue > 100) {
+            context.buildConstraintViolationWithTemplate(
+                            "Percentage discount cannot be greater than 100%")
+                    .addPropertyNode("discountValue")
+                    .addConstraintViolation();
+            valid = false;
+        }
+
         return valid;
     }
+
 }
