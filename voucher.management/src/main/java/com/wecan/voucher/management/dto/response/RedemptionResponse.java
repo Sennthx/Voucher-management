@@ -1,9 +1,11 @@
 package com.wecan.voucher.management.dto.response;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public record RedemptionResponse(
-        Long id,
-        Instant redeemedAt,
-        String redeemerIp
+        Long redemptionId,
+        LocalDate redeemedAt,
+        String redeemerIp,
+        Integer discountValue,
+        String discountType
 ) {}

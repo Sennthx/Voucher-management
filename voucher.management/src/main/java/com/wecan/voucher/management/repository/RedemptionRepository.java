@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RedemptionRepository extends JpaRepository<Redemption, Long> {
     List<Redemption> findByVoucher(Voucher voucher);
+    long countByVoucherId(Long voucherId);
 }
