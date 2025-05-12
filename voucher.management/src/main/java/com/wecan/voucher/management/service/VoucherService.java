@@ -1,7 +1,6 @@
 package com.wecan.voucher.management.service;
 
 import com.wecan.voucher.management.dto.request.RedemptionRequest;
-import com.wecan.voucher.management.dto.response.VoucherValidationResponse;
 import com.wecan.voucher.management.model.Redemption;
 import com.wecan.voucher.management.model.Voucher;
 import jakarta.validation.Valid;
@@ -15,7 +14,4 @@ public interface VoucherService {
     List<Voucher> getAllVouchers();
     void deleteVoucher(Long id);
 
-    Redemption redeemVoucher(@Valid RedemptionRequest redemptionRequest, String remoteAddr);
-
-    // More: update, redeem, validate, etc.
 }

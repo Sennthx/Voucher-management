@@ -1,7 +1,7 @@
 package com.wecan.voucher.management.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "redemptions")
@@ -16,10 +16,7 @@ public class Redemption {
     private Voucher voucher;
 
     @Column(nullable = false)
-    private Instant redeemedAt = Instant.now();
-
-    @Column(nullable = false, length = 45)
-    private String redeemerIp;
+    private LocalDate redeemedAt = LocalDate.now();
 
 
     public Redemption() {}
@@ -28,9 +25,8 @@ public class Redemption {
         this.voucher = voucher;
     }
 
-    public Redemption(Instant redeemedAt, String redeemerIp, Voucher voucher) {
+    public Redemption(LocalDate redeemedAt, Voucher voucher) {
         this.redeemedAt = redeemedAt;
-        this.redeemerIp = redeemerIp;
         this.voucher = voucher;
     }
 
@@ -39,12 +35,8 @@ public class Redemption {
         return id;
     }
 
-    public Instant getRedeemedAt() {
+    public LocalDate getRedeemedAt() {
         return redeemedAt;
-    }
-
-    public String getRedeemerIp() {
-        return redeemerIp;
     }
 
     public Voucher getVoucher() {
@@ -57,12 +49,8 @@ public class Redemption {
         this.id = id;
     }
 
-    public void setRedeemedAt(Instant redeemedAt) {
+    public void setRedeemedAt(LocalDate redeemedAt) {
         this.redeemedAt = redeemedAt;
-    }
-
-    public void setRedeemerIp(String redeemerIp) {
-        this.redeemerIp = redeemerIp;
     }
 
     public void setVoucher(Voucher voucher) {
@@ -77,7 +65,6 @@ public class Redemption {
                 "id=" + id +
                 ", voucher=" + voucher +
                 ", redeemedAt=" + redeemedAt +
-                ", redeemerIp='" + redeemerIp + '\'' +
                 '}';
     }
 }

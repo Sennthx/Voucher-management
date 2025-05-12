@@ -22,7 +22,7 @@ public class RateLimitAspect {
     public RateLimitAspect(HttpServletRequest request) {
         this.request = request;
         this.requestCounts = Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.MINUTES) // long enough, actual window checked manually
+                .expireAfterWrite(10, TimeUnit.MINUTES)
                 .build();
     }
 

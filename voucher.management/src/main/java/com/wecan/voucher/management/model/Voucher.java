@@ -43,9 +43,6 @@ public class Voucher {
     @Column(nullable = false)
     private DiscountType discountType = DiscountType.FIXED;
 
-    @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Redemption> redemptions;
-
     public enum VoucherType {
         SINGLE, MULTIPLE, LIMITED
     }
@@ -95,10 +92,6 @@ public class Voucher {
         return redemptionLimit;
     }
 
-    public List<Redemption> getRedemptions() {
-        return redemptions;
-    }
-
     public VoucherType getType() {
         return type;
     }
@@ -133,10 +126,6 @@ public class Voucher {
         this.redemptionLimit = redemptionLimit;
     }
 
-    public void setRedemptions(List<Redemption> redemptions) {
-        this.redemptions = redemptions;
-    }
-
     public void setType(VoucherType type) {
         this.type = type;
     }
@@ -162,7 +151,6 @@ public class Voucher {
                 ", validTo=" + validTo +
                 ", discountValue=" + discountValue +
                 ", discountType=" + discountType +
-                ", redemptions=" + redemptions +
                 '}';
     }
 }

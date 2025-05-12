@@ -1,9 +1,6 @@
 package com.wecan.voucher.management.service.impl;
 
-import com.wecan.voucher.management.dto.request.RedemptionRequest;
-import com.wecan.voucher.management.dto.response.VoucherValidationResponse;
 import com.wecan.voucher.management.exception.DuplicateResourceException;
-import com.wecan.voucher.management.model.Redemption;
 import com.wecan.voucher.management.model.Voucher;
 import com.wecan.voucher.management.repository.VoucherRepository;
 import com.wecan.voucher.management.service.VoucherService;
@@ -47,12 +44,6 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public void deleteVoucher(Long id) {
         voucherRepository.deleteById(id);
-    }
-
-
-    @Override
-    public Redemption redeemVoucher(RedemptionRequest redemptionRequest, String remoteAddr) {
-        return null;
     }
 
 }
