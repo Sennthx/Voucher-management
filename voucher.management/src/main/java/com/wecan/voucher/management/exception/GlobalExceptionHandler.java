@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, String>> handleResponseStatusException(ResponseStatusException ex) {
-        HttpStatusCode status = ex.getStatusCode(); // use the original status
+        HttpStatusCode status = ex.getStatusCode();
         String message = ex.getReason() != null ? ex.getReason() : "Unexpected error";
 
         return new ResponseEntity<>(
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleAll(Exception ex) {
-        return new ResponseEntity<>(Map.of("error", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Map.of("error", ex.getMessage() +" \n"+ex.getClass().getTypeName()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
