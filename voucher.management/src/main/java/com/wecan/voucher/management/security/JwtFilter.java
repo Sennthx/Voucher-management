@@ -7,19 +7,35 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private RequestMatcher[] skipMatchers;
 
     public JwtFilter(JwtService jwtService) {
         this.jwtService = jwtService;
+    }
+
+    public void setSkipMatchers(RequestMatcher... skipMatchers) {
+        this.skipMatchers = skipMatchers;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        if (skipMatchers == null) {
+            return false;
+        }
+        return Arrays.stream(skipMatchers)
+                .anyMatch(matcher -> matcher.matches(request));
     }
 
     @Override
@@ -30,10 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (shouldSkipAuthentication(request)) {
-            chain.doFilter(request, response);
-            return;
-        }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
@@ -53,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     claims.getSubject(),
                     null,
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + claims.get("role")))
             );
 
             // Set authentication in SecurityContext
@@ -65,11 +77,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
-    }
-
-    private boolean shouldSkipAuthentication(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        return uri.equals("/auth/login") || uri.contains("/redeem") || uri.contains("/validate");
     }
 
     private void sendError(HttpServletResponse response, int status, String message) throws IOException {

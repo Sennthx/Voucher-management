@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -25,13 +27,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Define public endpoints
+        RequestMatcher[] publicEndpoints = {
+                new AntPathRequestMatcher("/auth/login", "POST"),
+                new AntPathRequestMatcher("/api/vouchers/redeem")
+        };
+
+        // Configure the filter to skip these endpoints
+        jwtFilter.setSkipMatchers(publicEndpoints);
+
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/vouchers").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/vouchers").hasRole("ADMIN")
-                        .requestMatchers("/api/vouchers/redeem", "/api/vouchers/validate/**").permitAll()
+                        .requestMatchers("/api/vouchers/redeem").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
