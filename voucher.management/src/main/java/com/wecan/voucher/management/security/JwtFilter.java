@@ -44,8 +44,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws IOException, ServletException {
 
-        String authHeader = request.getHeader("Authorization");
+        if (shouldNotFilter(request)) {
+            chain.doFilter(request, response);
+            return;
+        }
 
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
@@ -54,6 +58,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String token = authHeader.substring(7);
+
+            if (token.isEmpty()) {
+                sendError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                        "Empty token provided");
+                return;
+            }
+
             Claims claims = jwtService.validateToken(token);
 
             if (!"ADMIN".equals(claims.get("role"))) {
@@ -70,13 +81,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // Set authentication in SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
 
         } catch (Exception e) {
             sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
-            return;
         }
-
-        chain.doFilter(request, response);
     }
 
     private void sendError(HttpServletResponse response, int status, String message) throws IOException {
