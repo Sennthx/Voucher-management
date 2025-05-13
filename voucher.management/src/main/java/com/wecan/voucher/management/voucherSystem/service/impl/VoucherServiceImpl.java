@@ -28,6 +28,28 @@ public class VoucherServiceImpl implements VoucherService {
             voucher.setRedemptionLimit(1);
         }
 
+        if (voucher.getType() == Voucher.VoucherType.LIMITED || voucher.getType() == Voucher.VoucherType.MULTIPLE) {
+            if (voucher.getRedemptionLimit() == null || voucher.getRedemptionLimit() <= 1) {
+                throw new IllegalArgumentException("Redemption limit must be greater than 1 for type: " + voucher.getType());
+            }
+        }
+
+        if (voucher.getType() == Voucher.VoucherType.LIMITED) {
+            if (voucher.getValidFrom() == null || voucher.getValidTo() == null) {
+                throw new IllegalArgumentException("Valid-from and valid-to are required for LIMITED vouchers");
+            }
+        }
+
+        if (voucher.getValidFrom() != null && voucher.getValidTo() != null &&
+                voucher.getValidTo().isBefore(voucher.getValidFrom())) {
+            throw new IllegalArgumentException("Valid-to date must be after or equal to valid-from date");
+        }
+
+        if (voucher.getDiscountType() == Voucher.DiscountType.PERCENTAGE &&
+                voucher.getDiscountValue() != null && voucher.getDiscountValue() > 100) {
+            throw new IllegalArgumentException("Percentage discount cannot be greater than 100%");
+        }
+
         return voucherRepository.save(voucher);
     }
 
@@ -45,5 +67,4 @@ public class VoucherServiceImpl implements VoucherService {
     public void deleteVoucher(Long id) {
         voucherRepository.deleteById(id);
     }
-
 }
