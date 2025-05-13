@@ -1,9 +1,9 @@
-package com.wecan.voucher.management.service.impl;
+package com.wecan.voucher.management.voucherSystem.service.impl;
 
 import com.wecan.voucher.management.exception.DuplicateResourceException;
-import com.wecan.voucher.management.model.Voucher;
-import com.wecan.voucher.management.repository.VoucherRepository;
-import com.wecan.voucher.management.service.VoucherService;
+import com.wecan.voucher.management.voucherSystem.model.Voucher;
+import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
+import com.wecan.voucher.management.voucherSystem.service.VoucherService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.wecan.voucher.management.controller;
+package com.wecan.voucher.management.voucherSystem.controller;
 
 import com.wecan.voucher.management.config.AdminConfigProperties;
-import com.wecan.voucher.management.dto.request.LoginRequest;
+import com.wecan.voucher.management.voucherSystem.dto.request.LoginRequest;
 import com.wecan.voucher.management.security.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

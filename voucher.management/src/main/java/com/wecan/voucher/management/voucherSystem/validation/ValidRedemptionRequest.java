@@ -1,6 +1,6 @@
-package com.wecan.voucher.management.validation;
+package com.wecan.voucher.management.voucherSystem.validation;
 
-import com.wecan.voucher.management.validation.impl.RedemptionRequestValidator;
+import com.wecan.voucher.management.voucherSystem.validation.impl.RedemptionRequestValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

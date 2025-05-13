@@ -1,6 +1,6 @@
-package com.wecan.voucher.management.validation.impl;
+package com.wecan.voucher.management.voucherSystem.validation.impl;
 
-import com.wecan.voucher.management.validation.EnumValidator;
+import com.wecan.voucher.management.voucherSystem.validation.EnumValidator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

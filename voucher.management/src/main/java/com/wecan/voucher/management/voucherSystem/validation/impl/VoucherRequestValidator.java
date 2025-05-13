@@ -1,7 +1,7 @@
-package com.wecan.voucher.management.validation.impl;
+package com.wecan.voucher.management.voucherSystem.validation.impl;
 
-import com.wecan.voucher.management.dto.request.VoucherRequest;
-import com.wecan.voucher.management.validation.ValidVoucherRequest;
+import com.wecan.voucher.management.voucherSystem.dto.request.VoucherRequest;
+import com.wecan.voucher.management.voucherSystem.validation.ValidVoucherRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

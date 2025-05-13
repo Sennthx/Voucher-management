@@ -1,9 +1,9 @@
-package com.wecan.voucher.management.dto.request;
+package com.wecan.voucher.management.voucherSystem.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wecan.voucher.management.model.Voucher;
-import com.wecan.voucher.management.validation.EnumValidator;
-import com.wecan.voucher.management.validation.ValidVoucherRequest;
+import com.wecan.voucher.management.voucherSystem.model.Voucher;
+import com.wecan.voucher.management.voucherSystem.validation.EnumValidator;
+import com.wecan.voucher.management.voucherSystem.validation.ValidVoucherRequest;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 

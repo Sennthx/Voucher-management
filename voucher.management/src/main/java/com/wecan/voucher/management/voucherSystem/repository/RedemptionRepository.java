@@ -1,7 +1,7 @@
-package com.wecan.voucher.management.repository;
+package com.wecan.voucher.management.voucherSystem.repository;
 
-import com.wecan.voucher.management.model.Redemption;
-import com.wecan.voucher.management.model.Voucher;
+import com.wecan.voucher.management.voucherSystem.model.Redemption;
+import com.wecan.voucher.management.voucherSystem.model.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

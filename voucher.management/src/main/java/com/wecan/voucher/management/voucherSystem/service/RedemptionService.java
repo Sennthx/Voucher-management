@@ -1,6 +1,6 @@
-package com.wecan.voucher.management.service;
+package com.wecan.voucher.management.voucherSystem.service;
 
-import com.wecan.voucher.management.model.Redemption;
+import com.wecan.voucher.management.voucherSystem.model.Redemption;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package com.wecan.voucher.management.service.impl;
+package com.wecan.voucher.management.voucherSystem.service.impl;
 
 import com.wecan.voucher.management.exception.ResourceNotFoundException;
-import com.wecan.voucher.management.model.Redemption;
-import com.wecan.voucher.management.model.Voucher;
-import com.wecan.voucher.management.repository.RedemptionRepository;
-import com.wecan.voucher.management.repository.VoucherRepository;
-import com.wecan.voucher.management.service.RedemptionService;
+import com.wecan.voucher.management.voucherSystem.model.Redemption;
+import com.wecan.voucher.management.voucherSystem.model.Voucher;
+import com.wecan.voucher.management.voucherSystem.repository.RedemptionRepository;
+import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
+import com.wecan.voucher.management.voucherSystem.service.RedemptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

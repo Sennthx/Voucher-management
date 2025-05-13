@@ -1,4 +1,4 @@
-package com.wecan.voucher.management.dto.request;
+package com.wecan.voucher.management.voucherSystem.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

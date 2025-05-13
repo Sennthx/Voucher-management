@@ -1,11 +1,10 @@
-package com.wecan.voucher.management.model;
+package com.wecan.voucher.management.voucherSystem.model;
 
-import com.wecan.voucher.management.dto.request.VoucherRequest;
+import com.wecan.voucher.management.voucherSystem.dto.request.VoucherRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "vouchers")

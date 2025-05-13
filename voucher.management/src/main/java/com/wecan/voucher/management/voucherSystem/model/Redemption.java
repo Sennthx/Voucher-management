@@ -1,4 +1,4 @@
-package com.wecan.voucher.management.model;
+package com.wecan.voucher.management.voucherSystem.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

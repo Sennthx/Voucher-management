@@ -1,14 +1,14 @@
-package com.wecan.voucher.management.controller;
+package com.wecan.voucher.management.voucherSystem.controller;
 
 import com.wecan.voucher.management.annotations.RateLimited;
-import com.wecan.voucher.management.dto.request.RedemptionRequest;
-import com.wecan.voucher.management.dto.request.VoucherRequest;
-import com.wecan.voucher.management.dto.response.RedemptionResponse;
-import com.wecan.voucher.management.dto.response.VoucherResponse;
-import com.wecan.voucher.management.model.Redemption;
-import com.wecan.voucher.management.model.Voucher;
-import com.wecan.voucher.management.service.RedemptionService;
-import com.wecan.voucher.management.service.VoucherService;
+import com.wecan.voucher.management.voucherSystem.dto.request.RedemptionRequest;
+import com.wecan.voucher.management.voucherSystem.dto.request.VoucherRequest;
+import com.wecan.voucher.management.voucherSystem.dto.response.RedemptionResponse;
+import com.wecan.voucher.management.voucherSystem.dto.response.VoucherResponse;
+import com.wecan.voucher.management.voucherSystem.model.Redemption;
+import com.wecan.voucher.management.voucherSystem.model.Voucher;
+import com.wecan.voucher.management.voucherSystem.service.RedemptionService;
+import com.wecan.voucher.management.voucherSystem.service.VoucherService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

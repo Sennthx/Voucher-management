@@ -1,8 +1,8 @@
-package com.wecan.voucher.management.validation.impl;
+package com.wecan.voucher.management.voucherSystem.validation.impl;
 
-import com.wecan.voucher.management.dto.request.RedemptionRequest;
-import com.wecan.voucher.management.repository.VoucherRepository;
-import com.wecan.voucher.management.validation.ValidRedemptionRequest;
+import com.wecan.voucher.management.voucherSystem.dto.request.RedemptionRequest;
+import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
+import com.wecan.voucher.management.voucherSystem.validation.ValidRedemptionRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;

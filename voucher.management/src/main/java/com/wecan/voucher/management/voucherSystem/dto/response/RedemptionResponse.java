@@ -1,6 +1,6 @@
-package com.wecan.voucher.management.dto.response;
+package com.wecan.voucher.management.voucherSystem.dto.response;
 
-import com.wecan.voucher.management.model.Redemption;
+import com.wecan.voucher.management.voucherSystem.model.Redemption;
 import java.time.LocalDate;
 
 public record RedemptionResponse(
