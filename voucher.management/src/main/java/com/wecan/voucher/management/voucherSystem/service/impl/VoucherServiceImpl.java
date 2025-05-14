@@ -6,6 +6,7 @@ import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
 import com.wecan.voucher.management.voucherSystem.service.VoucherService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,23 @@ public class VoucherServiceImpl implements VoucherService {
     public Voucher createVoucher(Voucher voucher) {
         if (voucherRepository.findByCode(voucher.getCode()).isPresent()) {
             throw new DuplicateResourceException("code", "Voucher with this code already exists");
+        }
+
+        if (voucher.getType() == null) {
+            throw new IllegalArgumentException("Voucher type cannot be null");
+        }
+
+        if (voucher.getDiscountType() == null) {
+            throw new IllegalArgumentException("Discount type cannot be null");
+        }
+
+        if (voucher.getDiscountValue() == null) {
+            throw new IllegalArgumentException("Discount value cannot be null");
+        }
+
+        if (voucher.getDiscountType() == Voucher.DiscountType.FIXED &&
+                voucher.getDiscountValue() != null && voucher.getDiscountValue() < 0) {
+            throw new IllegalArgumentException("Fixed amount discount cannot be negative");
         }
 
         if (voucher.getType() == Voucher.VoucherType.SINGLE) {
@@ -43,6 +61,10 @@ public class VoucherServiceImpl implements VoucherService {
         if (voucher.getValidFrom() != null && voucher.getValidTo() != null &&
                 voucher.getValidTo().isBefore(voucher.getValidFrom())) {
             throw new IllegalArgumentException("Valid-to date must be after or equal to valid-from date");
+        }
+
+        if (voucher.getValidTo() != null && voucher.getValidTo().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Valid-to date cannot be in the past");
         }
 
         if (voucher.getDiscountType() == Voucher.DiscountType.PERCENTAGE &&
