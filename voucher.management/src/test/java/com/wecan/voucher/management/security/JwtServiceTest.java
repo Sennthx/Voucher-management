@@ -20,7 +20,7 @@ class JwtServiceTest {
     void setUp() {
         jwtConfig = Mockito.mock(JwtConfig.class);
 
-        String secret = Base64.getEncoder().encodeToString("supersecuresecretkeythatishardtoforge1234567890".getBytes());
+        String secret = Base64.getEncoder().encodeToString("supersecuresecretkeythatishardtoforge12345678901".getBytes());
         Mockito.when(jwtConfig.getSecret()).thenReturn(secret);
         Mockito.when(jwtConfig.getExpirationMs()).thenReturn(3600000L); // 1 hour
 
@@ -29,7 +29,7 @@ class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Token should contain correct subject and role when generated")
+    @DisplayName("Token should contain correct subject and role after generation")
     void generateTokenShouldContainCorrectUsernameAndRole() {
         String token = jwtService.generateToken("testUser");
 
@@ -40,7 +40,7 @@ class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Validation should fail when token is tampered")
+    @DisplayName("Validation should fail when token is tampered with")
     void validateTokenShouldThrowForTamperedToken() {
         String token = jwtService.generateToken("user");
         String tampered = token.replace('a', 'b');
