@@ -12,6 +12,12 @@ public class RedemptionRequestValidator implements ConstraintValidator<ValidRede
     @Autowired
     private VoucherRepository voucherRepository;
 
+    public RedemptionRequestValidator() { }
+
+    public RedemptionRequestValidator(VoucherRepository voucherRepository) {
+        this.voucherRepository = voucherRepository;
+    }
+
     @Override
     public boolean isValid(RedemptionRequest request, ConstraintValidatorContext context) {
         if (request == null) return true; // skip null (other validations can catch it)
