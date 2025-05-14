@@ -48,7 +48,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should initialize validator with enum values")
-    void initialize_ShouldSetEnumValues() {
+    void initializeShouldSetEnumValues() {
         validator.initialize(constraintAnnotation);
 
         List<String> expectedValues = Arrays.asList("VALUE1", "VALUE2", "VALUE3");
@@ -57,7 +57,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should accept null value")
-    void isValid_ShouldAcceptNullValue() {
+    void isValidShouldAcceptNullValue() {
         validator.initialize(constraintAnnotation);
         assertTrue(validator.isValid(null, context));
         verifyNoInteractions(context);
@@ -65,7 +65,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should validate case-sensitive enum values")
-    void isValid_ShouldValidateCaseSensitive() {
+    void isValidShouldValidateCaseSensitive() {
         when(constraintAnnotation.ignoreCase()).thenReturn(false);
         validator.initialize(constraintAnnotation);
 
@@ -76,7 +76,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should validate case-insensitive enum values")
-    void isValid_ShouldValidateCaseInsensitive() {
+    void isValidShouldValidateCaseInsensitive() {
         when(constraintAnnotation.ignoreCase()).thenReturn(true);
         validator.initialize(constraintAnnotation);
 
@@ -88,7 +88,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should build proper error message")
-    void isValid_ShouldBuildErrorMessage() {
+    void isValidShouldBuildErrorMessage() {
         when(constraintAnnotation.ignoreCase()).thenReturn(false);
         validator.initialize(constraintAnnotation);
 
@@ -105,7 +105,7 @@ class EnumValidatorImplTest {
 
     @Test
     @DisplayName("Should handle empty enum class")
-    void initialize_ShouldHandleEmptyEnum() {
+    void initializeShouldHandleEmptyEnum() {
         when(constraintAnnotation.enumClass()).thenReturn((Class) EmptyEnum.class);
         validator.initialize(constraintAnnotation);
 
@@ -113,12 +113,10 @@ class EnumValidatorImplTest {
         assertFalse(validator.isValid("ANY", context));
     }
 
-    // Helper enum for testing empty enum case
     private enum EmptyEnum {
         // No values
     }
 
-    // Test-only getter for verification
     private List<String> getEnumValues() {
         return validator.getEnumValues();
     }

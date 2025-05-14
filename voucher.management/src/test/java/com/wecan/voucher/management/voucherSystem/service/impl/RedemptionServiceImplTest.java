@@ -54,7 +54,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should successfully redeem valid voucher")
-    void redeemVoucher_ShouldSucceedForValidVoucher() {
+    void redeemVoucherShouldSucceedForValidVoucher() {
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(0L);
 
@@ -71,7 +71,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should throw when voucher not found")
-    void redeemVoucher_ShouldThrowWhenVoucherNotFound() {
+    void redeemVoucherShouldThrowWhenVoucherNotFound() {
         when(voucherRepository.findByCode("INVALID_CODE")).thenReturn(Optional.empty());
 
         ResourceNotFoundException ex = assertThrows(
@@ -84,7 +84,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should throw when voucher is not yet valid")
-    void redeemVoucher_ShouldThrowWhenVoucherNotValid() {
+    void redeemVoucherShouldThrowWhenVoucherNotValid() {
         validVoucher.setValidFrom(TODAY.plusDays(1));
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
 
@@ -99,7 +99,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should throw when voucher has expired")
-    void redeemVoucher_ShouldThrowWhenVoucherExpired() {
+    void redeemVoucherShouldThrowWhenVoucherExpired() {
         validVoucher.setValidTo(TODAY.minusDays(1));
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
 
@@ -114,7 +114,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should throw when redemption limit reached")
-    void redeemVoucher_ShouldThrowWhenRedemptionLimitReached() {
+    void redeemVoucherShouldThrowWhenRedemptionLimitReached() {
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(5L);
 
@@ -129,7 +129,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should get redemptions for valid voucher")
-    void getRedemptionsForVoucher_ShouldReturnRedemptions() {
+    void getRedemptionsForVoucherShouldReturnRedemptions() {
         Redemption redemption = new Redemption(TODAY, validVoucher);
         List<Redemption> expectedRedemptions = List.of(redemption);
 
@@ -145,7 +145,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should throw when getting redemptions for non-existent voucher")
-    void getRedemptionsForVoucher_ShouldThrowWhenVoucherNotFound() {
+    void getRedemptionsForVoucherShouldThrowWhenVoucherNotFound() {
         when(voucherRepository.findByCode("INVALID_CODE")).thenReturn(Optional.empty());
 
         ResourceNotFoundException ex = assertThrows(
@@ -158,7 +158,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should allow unlimited redemptions when no limit set")
-    void redeemVoucher_ShouldAllowUnlimitedRedemptionsWhenNoLimit() {
+    void redeemVoucherShouldAllowUnlimitedRedemptionsWhenNoLimit() {
         validVoucher.setRedemptionLimit(null);
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(100L); // High number
@@ -174,7 +174,7 @@ class RedemptionServiceImplTest {
 
     @Test
     @DisplayName("Should allow redemption on last valid day")
-    void redeemVoucher_ShouldAllowRedemptionOnLastValidDay() {
+    void redeemVoucherShouldAllowRedemptionOnLastValidDay() {
         validVoucher.setValidTo(TODAY);
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(0L);
