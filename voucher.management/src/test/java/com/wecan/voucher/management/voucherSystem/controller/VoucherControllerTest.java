@@ -31,9 +31,6 @@ class VoucherControllerTest {
     @Mock
     private VoucherService voucherService;
 
-    @Mock
-    private RedemptionService redemptionService;
-
     @InjectMocks
     private VoucherController voucherController;
 

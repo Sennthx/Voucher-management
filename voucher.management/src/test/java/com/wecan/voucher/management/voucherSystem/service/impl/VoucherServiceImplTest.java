@@ -8,7 +8,10 @@ import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -16,16 +19,19 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class VoucherServiceImplTest {
+
+    @Mock
     private VoucherRepository voucherRepository;
+
+    @InjectMocks
     private VoucherServiceImpl voucherService;
+
     private Voucher baseVoucher;
 
     @BeforeEach
     void setUp() {
-        voucherRepository = mock(VoucherRepository.class);
-        voucherService = new VoucherServiceImpl(voucherRepository);
-
         // Base valid voucher that tests can modify
         baseVoucher = new Voucher();
         baseVoucher.setCode("TEST123");
@@ -34,19 +40,10 @@ class VoucherServiceImplTest {
         baseVoucher.setDiscountValue(50);
     }
 
-    // Helper method for repository mocking
-    private void mockVoucherExists(String code) {
-        when(voucherRepository.findByCode(code)).thenReturn(Optional.of(new Voucher()));
-    }
-
-    private void mockVoucherNotExists(String code) {
-        when(voucherRepository.findByCode(code)).thenReturn(Optional.empty());
-    }
-
     @Test
     @DisplayName("Should save single voucher with redemption limit 1")
     void createVoucherShouldSaveSingleVoucherWithRedemptionLimit1() {
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
         when(voucherRepository.save(baseVoucher)).thenReturn(baseVoucher);
 
         Voucher result = voucherService.createVoucher(baseVoucher);
@@ -58,7 +55,7 @@ class VoucherServiceImplTest {
     @Test
     @DisplayName("Should throw when voucher code already exists")
     void createVoucherShouldThrowIfCodeAlreadyExists() {
-        mockVoucherExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.of(new Voucher()));
 
         assertThrows(DuplicateResourceException.class,
                 () -> voucherService.createVoucher(baseVoucher));
@@ -70,7 +67,7 @@ class VoucherServiceImplTest {
     void createVoucherShouldThrowIfRedemptionLimitInvalidForMultiple() {
         baseVoucher.setType(VoucherType.MULTIPLE);
         baseVoucher.setRedemptionLimit(1);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -85,7 +82,7 @@ class VoucherServiceImplTest {
     void createVoucherShouldThrowIfDatesMissingForLimited() {
         baseVoucher.setType(VoucherType.LIMITED);
         baseVoucher.setRedemptionLimit(5);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -102,7 +99,7 @@ class VoucherServiceImplTest {
         baseVoucher.setRedemptionLimit(5);
         baseVoucher.setValidFrom(LocalDate.now());
         baseVoucher.setValidTo(LocalDate.now().minusDays(1));
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -119,7 +116,7 @@ class VoucherServiceImplTest {
         baseVoucher.setRedemptionLimit(5);
         baseVoucher.setValidFrom(LocalDate.now().minusDays(6));
         baseVoucher.setValidTo(LocalDate.now().minusDays(5));
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -133,7 +130,7 @@ class VoucherServiceImplTest {
     @DisplayName("Should throw when percentage discount exceeds 100%")
     void createVoucherShouldThrowIfPercentageDiscountOver100() {
         baseVoucher.setDiscountValue(150);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -148,7 +145,7 @@ class VoucherServiceImplTest {
     void createVoucherShouldThrowIfFixedAmountNegative() {
         baseVoucher.setDiscountType(DiscountType.FIXED);
         baseVoucher.setDiscountValue(-10);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -202,7 +199,7 @@ class VoucherServiceImplTest {
     void createVoucherShouldCreateValidMultipleVoucher() {
         baseVoucher.setType(VoucherType.MULTIPLE);
         baseVoucher.setRedemptionLimit(10);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
         when(voucherRepository.save(baseVoucher)).thenReturn(baseVoucher);
 
         Voucher result = voucherService.createVoucher(baseVoucher);
@@ -218,7 +215,7 @@ class VoucherServiceImplTest {
         baseVoucher.setRedemptionLimit(5);
         baseVoucher.setValidFrom(LocalDate.now());
         baseVoucher.setValidTo(LocalDate.now().plusDays(30));
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
         when(voucherRepository.save(baseVoucher)).thenReturn(baseVoucher);
 
         Voucher result = voucherService.createVoucher(baseVoucher);
@@ -233,7 +230,7 @@ class VoucherServiceImplTest {
     @DisplayName("Should throw when discount value is null")
     void createVoucherShouldThrowIfDiscountValueNull() {
         baseVoucher.setDiscountValue(null);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -247,7 +244,7 @@ class VoucherServiceImplTest {
     @DisplayName("Should throw when voucher type is null")
     void createVoucherShouldThrowIfTypeNull() {
         baseVoucher.setType(null);
-        mockVoucherNotExists("TEST123");
+        when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
