@@ -26,9 +26,14 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Str
 
         if (!isValidEnum(value)) {
             context.disableDefaultConstraintViolation();
+
+            String messageTemplate = context.getDefaultConstraintMessageTemplate();
+            if (messageTemplate == null) {
+                messageTemplate = "Invalid value. Allowed values: {enumValues}";
+            }
+
             context.buildConstraintViolationWithTemplate(
-                    context.getDefaultConstraintMessageTemplate()
-                            .replace("{enumValues}", String.join(", ", enumValues))
+                    messageTemplate.replace("{enumValues}", String.join(", ", enumValues))
             ).addConstraintViolation();
             return false;
         }
@@ -39,5 +44,9 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Str
         return ignoreCase
                 ? enumValues.stream().anyMatch(v -> v.equalsIgnoreCase(value))
                 : enumValues.contains(value);
+    }
+
+    List<String> getEnumValues() {
+        return enumValues;
     }
 }
