@@ -92,18 +92,12 @@ Make sure the database is up before running the app.
 
 ### Running with Docker
 
-```bash
-./mvnw clean package -DskipTests
-```
-
----
-
 ## Managing Services
 
 ### Start the Full Stack
 
 ```bash
-docker-compose up --build -d
+docker-compose up --build
 ```
 
 ### Stop the Stack
