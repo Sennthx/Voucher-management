@@ -14,8 +14,11 @@ public class VoucherApplication implements CommandLineRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(VoucherApplication.class);
 
-	@Autowired
-	private DataSource dataSource;
+	private final DataSource dataSource;
+
+	public VoucherApplication(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(VoucherApplication.class, args);
