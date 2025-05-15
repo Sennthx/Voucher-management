@@ -6,7 +6,7 @@ import com.wecan.voucher.management.voucherSystem.repository.VoucherRepository;
 import com.wecan.voucher.management.voucherSystem.service.VoucherService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +63,7 @@ public class VoucherServiceImpl implements VoucherService {
             throw new IllegalArgumentException("Valid-to date must be after or equal to valid-from date");
         }
 
-        if (voucher.getValidTo() != null && voucher.getValidTo().isBefore(LocalDate.now())) {
+        if (voucher.getValidTo() != null && voucher.getValidTo().isBefore(Instant.now())) {
             throw new IllegalArgumentException("Valid-to date cannot be in the past");
         }
 

@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,8 +96,8 @@ class VoucherServiceImplTest {
     void createVoucherShouldThrowIfValidToBeforeValidFrom() {
         baseVoucher.setType(VoucherType.LIMITED);
         baseVoucher.setRedemptionLimit(5);
-        baseVoucher.setValidFrom(LocalDate.now());
-        baseVoucher.setValidTo(LocalDate.now().minusDays(1));
+        baseVoucher.setValidFrom(Instant.now());
+        baseVoucher.setValidTo(Instant.now().minusSeconds(86400)); // minus 1 day
         when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
@@ -113,8 +113,8 @@ class VoucherServiceImplTest {
     void createVoucherShouldThrowIfValidToInPast() {
         baseVoucher.setType(VoucherType.LIMITED);
         baseVoucher.setRedemptionLimit(5);
-        baseVoucher.setValidFrom(LocalDate.now().minusDays(6));
-        baseVoucher.setValidTo(LocalDate.now().minusDays(5));
+        baseVoucher.setValidFrom(Instant.now().minusSeconds(518400)); // minus 6 days
+        baseVoucher.setValidTo(Instant.now().minusSeconds(432000)); // minus 5 days
         when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
 
         IllegalArgumentException ex = assertThrows(
@@ -210,10 +210,14 @@ class VoucherServiceImplTest {
     @Test
     @DisplayName("Should successfully create valid limited voucher")
     void createVoucherShouldCreateValidLimitedVoucher() {
+        Instant now = Instant.now();
+        Instant thirtyDaysLater = now.plusSeconds(30 * 24 * 60 * 60); // 30 days in seconds
+
         baseVoucher.setType(VoucherType.LIMITED);
         baseVoucher.setRedemptionLimit(5);
-        baseVoucher.setValidFrom(LocalDate.now());
-        baseVoucher.setValidTo(LocalDate.now().plusDays(30));
+        baseVoucher.setValidFrom(now);
+        baseVoucher.setValidTo(thirtyDaysLater);
+
         when(voucherRepository.findByCode("TEST123")).thenReturn(Optional.empty());
         when(voucherRepository.save(baseVoucher)).thenReturn(baseVoucher);
 
@@ -222,6 +226,7 @@ class VoucherServiceImplTest {
         assertEquals(5, result.getRedemptionLimit());
         assertNotNull(result.getValidFrom());
         assertNotNull(result.getValidTo());
+        assertTrue(result.getValidTo().isAfter(result.getValidFrom())); // Additional validation
         verify(voucherRepository).save(baseVoucher);
     }
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,8 +42,8 @@ class VoucherRequestValidatorTest {
                 "TEST123",
                 type.name(),
                 type == Voucher.VoucherType.LIMITED ? 10 : null,
-                type == Voucher.VoucherType.LIMITED ? LocalDate.now() : null,
-                type == Voucher.VoucherType.LIMITED ? LocalDate.now().plusDays(30) : null,
+                type == Voucher.VoucherType.LIMITED ? Instant.now() : null,
+                type == Voucher.VoucherType.LIMITED ? Instant.now().plusSeconds(30 * 24 * 60 * 60) : null,
                 10,
                 Voucher.DiscountType.PERCENTAGE.name()
         );
@@ -83,8 +84,8 @@ class VoucherRequestValidatorTest {
                 "TEST123",
                 Voucher.VoucherType.LIMITED.name(),
                 1,
-                LocalDate.now(),
-                LocalDate.now().plusDays(30),
+                Instant.now(),
+                Instant.now().plusSeconds(30 * 24 * 60 * 60),
                 10,
                 Voucher.DiscountType.PERCENTAGE.name()
         );
@@ -100,8 +101,8 @@ class VoucherRequestValidatorTest {
                 "TEST123",
                 Voucher.VoucherType.SINGLE.name(),
                 null,
-                LocalDate.now(),
-                LocalDate.now().minusDays(1),
+                Instant.now(),
+                Instant.now().minusSeconds(86400),
                 10,
                 Voucher.DiscountType.PERCENTAGE.name()
         );
@@ -117,8 +118,8 @@ class VoucherRequestValidatorTest {
                 "TEST123",
                 Voucher.VoucherType.SINGLE.name(),
                 null,
-                LocalDate.now(),
-                LocalDate.now().plusDays(30),
+                Instant.now(),
+                Instant.now().plusSeconds(30 * 24 * 60 * 60),
                 101,
                 Voucher.DiscountType.PERCENTAGE.name()
         );

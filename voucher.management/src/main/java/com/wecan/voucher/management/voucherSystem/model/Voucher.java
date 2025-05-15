@@ -4,7 +4,7 @@ import com.wecan.voucher.management.voucherSystem.dto.request.VoucherRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Entity
 @Table(name = "vouchers")
@@ -28,10 +28,10 @@ public class Voucher {
 
     @NotNull(message = "Valid-from date is required")
     @Column(nullable = false)
-    private LocalDate validFrom = LocalDate.now();
+    private Instant validFrom = Instant.now();
 
     @FutureOrPresent(message = "Valid-to date must be in the future")
-    private LocalDate validTo;
+    private Instant validTo;
 
     @NotNull(message = "Discount value is required")
     @Positive(message = "Discount value must be positive")
@@ -56,11 +56,11 @@ public class Voucher {
     public Voucher(String code, Integer discountValue) {
         this.code = code;
         this.discountValue = discountValue;
-        this.validFrom = LocalDate.now();
+        this.validFrom = Instant.now();
     }
 
     public Voucher(String code, VoucherType type, Integer redemptionLimit,
-                   LocalDate validFrom, LocalDate validTo, Integer discountValue,
+                   Instant validFrom, Instant validTo, Integer discountValue,
                    DiscountType discountType) {
         this.code = code;
         this.type = type;
@@ -108,11 +108,11 @@ public class Voucher {
         return type;
     }
 
-    public LocalDate getValidFrom() {
+    public Instant getValidFrom() {
         return validFrom;
     }
 
-    public LocalDate getValidTo() {
+    public Instant getValidTo() {
         return validTo;
     }
     // --------------------------------------------------------------------
@@ -142,11 +142,11 @@ public class Voucher {
         this.type = type;
     }
 
-    public void setValidFrom(LocalDate validFrom) {
+    public void setValidFrom(Instant validFrom) {
         this.validFrom = validFrom;
     }
 
-    public void setValidTo(LocalDate validTo) {
+    public void setValidTo(Instant validTo) {
         this.validTo = validTo;
     }
     // --------------------------------------------------------------------

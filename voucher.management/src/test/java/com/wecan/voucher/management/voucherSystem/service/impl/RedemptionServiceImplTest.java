@@ -15,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,9 @@ class RedemptionServiceImplTest {
 
     private Voucher validVoucher;
     private final String TEST_VOUCHER_CODE = "TEST123";
-    private final LocalDate TODAY = LocalDate.now();
+    private final Instant NOW = Instant.now();
+    private final Instant YESTERDAY = NOW.minus(1, ChronoUnit.DAYS);
+    private final Instant THIRTY_DAYS_LATER = NOW.plus(30, ChronoUnit.DAYS);
 
     @BeforeEach
     void setUp() {
@@ -45,8 +48,8 @@ class RedemptionServiceImplTest {
         validVoucher.setCode(TEST_VOUCHER_CODE);
         validVoucher.setType(Voucher.VoucherType.LIMITED);
         validVoucher.setRedemptionLimit(5);
-        validVoucher.setValidFrom(TODAY.minusDays(1));
-        validVoucher.setValidTo(TODAY.plusDays(30));
+        validVoucher.setValidFrom(YESTERDAY);
+        validVoucher.setValidTo(THIRTY_DAYS_LATER);
         validVoucher.setDiscountType(Voucher.DiscountType.PERCENTAGE);
         validVoucher.setDiscountValue(20);
     }
@@ -57,13 +60,13 @@ class RedemptionServiceImplTest {
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(0L);
 
-        Redemption expectedRedemption = new Redemption(TODAY, validVoucher);
+        Redemption expectedRedemption = new Redemption(NOW, validVoucher);
         when(redemptionRepository.save(any(Redemption.class))).thenReturn(expectedRedemption);
 
         Redemption result = redemptionService.redeemVoucher(TEST_VOUCHER_CODE);
 
         assertNotNull(result);
-        assertEquals(TODAY, result.getRedeemedAt());
+        assertEquals(NOW, result.getRedeemedAt());
         assertEquals(validVoucher, result.getVoucher());
         verify(redemptionRepository).save(any(Redemption.class));
     }
@@ -84,7 +87,7 @@ class RedemptionServiceImplTest {
     @Test
     @DisplayName("Should throw when voucher is not yet valid")
     void redeemVoucherShouldThrowWhenVoucherNotValid() {
-        validVoucher.setValidFrom(TODAY.plusDays(1));
+        validVoucher.setValidFrom(NOW.plus(1, ChronoUnit.DAYS));
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
 
         ResponseStatusException ex = assertThrows(
@@ -99,7 +102,7 @@ class RedemptionServiceImplTest {
     @Test
     @DisplayName("Should throw when voucher has expired")
     void redeemVoucherShouldThrowWhenVoucherExpired() {
-        validVoucher.setValidTo(TODAY.minusDays(1));
+        validVoucher.setValidTo(NOW.minus(1, ChronoUnit.DAYS));
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
 
         ResponseStatusException ex = assertThrows(
@@ -129,7 +132,7 @@ class RedemptionServiceImplTest {
     @Test
     @DisplayName("Should get redemptions for valid voucher")
     void getRedemptionsForVoucherShouldReturnRedemptions() {
-        Redemption redemption = new Redemption(TODAY, validVoucher);
+        Redemption redemption = new Redemption(NOW, validVoucher);
         List<Redemption> expectedRedemptions = List.of(redemption);
 
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
@@ -162,7 +165,7 @@ class RedemptionServiceImplTest {
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(100L); // High number
 
-        Redemption expectedRedemption = new Redemption(TODAY, validVoucher);
+        Redemption expectedRedemption = new Redemption(NOW, validVoucher);
         when(redemptionRepository.save(any(Redemption.class))).thenReturn(expectedRedemption);
 
         Redemption result = redemptionService.redeemVoucher(TEST_VOUCHER_CODE);
@@ -174,11 +177,12 @@ class RedemptionServiceImplTest {
     @Test
     @DisplayName("Should allow redemption on last valid day")
     void redeemVoucherShouldAllowRedemptionOnLastValidDay() {
-        validVoucher.setValidTo(TODAY);
+        validVoucher.setValidTo(NOW.plusSeconds(10));
+
         when(voucherRepository.findByCode(TEST_VOUCHER_CODE)).thenReturn(Optional.of(validVoucher));
         when(redemptionRepository.countByVoucherId(validVoucher.getId())).thenReturn(0L);
 
-        Redemption expectedRedemption = new Redemption(TODAY, validVoucher);
+        Redemption expectedRedemption = new Redemption(NOW, validVoucher);
         when(redemptionRepository.save(any(Redemption.class))).thenReturn(expectedRedemption);
 
         Redemption result = redemptionService.redeemVoucher(TEST_VOUCHER_CODE);

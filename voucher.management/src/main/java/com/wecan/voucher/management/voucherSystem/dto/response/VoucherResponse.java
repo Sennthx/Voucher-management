@@ -1,7 +1,8 @@
 package com.wecan.voucher.management.voucherSystem.dto.response;
 
 import com.wecan.voucher.management.voucherSystem.model.Voucher;
-import java.time.LocalDate;
+
+import java.time.Instant;
 
 public record VoucherResponse(
         String code,
@@ -9,7 +10,7 @@ public record VoucherResponse(
         Integer redemptionLimit,
         Integer discountValue,
         Voucher.DiscountType discountType,
-        LocalDate validTo,
+        Instant validTo,
         String status
 ) {
 
@@ -26,7 +27,7 @@ public record VoucherResponse(
     }
 
     private static String determineStatus(Voucher voucher) {
-        LocalDate today = LocalDate.now();
+        Instant today = Instant.now();
         if (voucher.getValidFrom() != null && today.isBefore(voucher.getValidFrom())) {
             return "NOT_YET_VALID";
         }

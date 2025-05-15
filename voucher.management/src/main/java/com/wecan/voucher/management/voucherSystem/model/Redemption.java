@@ -1,7 +1,8 @@
 package com.wecan.voucher.management.voucherSystem.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "redemptions")
@@ -16,7 +17,7 @@ public class Redemption {
     private Voucher voucher;
 
     @Column(nullable = false)
-    private LocalDate redeemedAt = LocalDate.now();
+    private Instant redeemedAt = Instant.now();
 
     public Redemption() {}
 
@@ -24,7 +25,7 @@ public class Redemption {
         this.voucher = voucher;
     }
 
-    public Redemption(LocalDate redeemedAt, Voucher voucher) {
+    public Redemption(Instant redeemedAt, Voucher voucher) {
         this.redeemedAt = redeemedAt;
         this.voucher = voucher;
     }
@@ -34,7 +35,7 @@ public class Redemption {
         return id;
     }
 
-    public LocalDate getRedeemedAt() {
+    public Instant getRedeemedAt() {
         return redeemedAt;
     }
 
@@ -48,7 +49,7 @@ public class Redemption {
         this.id = id;
     }
 
-    public void setRedeemedAt(LocalDate redeemedAt) {
+    public void setRedeemedAt(Instant redeemedAt) {
         this.redeemedAt = redeemedAt;
     }
 

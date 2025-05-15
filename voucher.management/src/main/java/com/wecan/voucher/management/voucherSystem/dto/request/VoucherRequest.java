@@ -5,7 +5,8 @@ import com.wecan.voucher.management.voucherSystem.model.Voucher;
 import com.wecan.voucher.management.voucherSystem.validation.EnumValidator;
 import com.wecan.voucher.management.voucherSystem.validation.ValidVoucherRequest;
 import jakarta.validation.constraints.*;
-import java.time.LocalDate;
+
+import java.time.Instant;
 
 @ValidVoucherRequest
 public record VoucherRequest(
@@ -22,13 +23,11 @@ public record VoucherRequest(
         @PositiveOrZero(message = "Redemption limit must be ≥ 0")
         Integer redemptionLimit,
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
         @NotNull(message = "Valid-from date is required")
-        LocalDate validFrom,
+        Instant validFrom,
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
         @FutureOrPresent(message = "Valid-to date must be in the future")
-        LocalDate validTo,
+        Instant validTo,
 
         @NotNull(message = "Discount value is required")
         @Positive(message = "Discount value must be > 0")

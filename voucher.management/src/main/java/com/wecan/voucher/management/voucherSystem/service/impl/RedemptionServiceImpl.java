@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class RedemptionServiceImpl implements RedemptionService {
         Voucher voucher = voucherRepository.findByCode(voucherCode)
                 .orElseThrow(() -> new ResourceNotFoundException("voucher", "Voucher not found"));
 
-        LocalDate today = LocalDate.now();
+        Instant today = Instant.now();
         if (voucher.getValidFrom().isAfter(today)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Voucher is not yet valid");
         }

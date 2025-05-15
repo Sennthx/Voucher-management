@@ -1,12 +1,9 @@
 package com.wecan.voucher.management.voucherSystem.controller;
 
-import com.wecan.voucher.management.voucherSystem.dto.request.RedemptionRequest;
 import com.wecan.voucher.management.voucherSystem.dto.request.VoucherRequest;
-import com.wecan.voucher.management.voucherSystem.dto.response.RedemptionResponse;
 import com.wecan.voucher.management.voucherSystem.dto.response.VoucherResponse;
 import com.wecan.voucher.management.voucherSystem.model.Redemption;
 import com.wecan.voucher.management.voucherSystem.model.Voucher;
-import com.wecan.voucher.management.voucherSystem.service.RedemptionService;
 import com.wecan.voucher.management.voucherSystem.service.VoucherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,9 +35,9 @@ class VoucherControllerTest {
     private Voucher testVoucher;
     private Redemption testRedemption;
     private final String TEST_CODE = "TEST_123";
-    private final LocalDate TODAY = LocalDate.now();
-    private final LocalDate FUTURE_DATE = TODAY.plusDays(30);
-    private final LocalDate PAST_DATE = TODAY.minusDays(1);
+    private final Instant NOW = Instant.now();
+    private final Instant FUTURE_DATE = NOW.plus(30, ChronoUnit.DAYS);
+    private final Instant PAST_DATE = NOW.minus(1, ChronoUnit.DAYS);
 
     @BeforeEach
     void setUp() {
@@ -48,7 +46,7 @@ class VoucherControllerTest {
         testVoucher.setCode(TEST_CODE);
         testVoucher.setType(Voucher.VoucherType.MULTIPLE);
         testVoucher.setRedemptionLimit(100);
-        testVoucher.setValidFrom(TODAY.minusDays(1));
+        testVoucher.setValidFrom(PAST_DATE);
         testVoucher.setValidTo(FUTURE_DATE);
         testVoucher.setDiscountValue(10);
         testVoucher.setDiscountType(Voucher.DiscountType.PERCENTAGE);
@@ -56,7 +54,7 @@ class VoucherControllerTest {
         testRedemption = new Redemption();
         testRedemption.setId(1L);
         testRedemption.setVoucher(testVoucher);
-        testRedemption.setRedeemedAt(TODAY);
+        testRedemption.setRedeemedAt(NOW);
     }
 
     @Test
@@ -66,7 +64,7 @@ class VoucherControllerTest {
                 TEST_CODE,
                 "MULTIPLE",
                 100,
-                TODAY.minusDays(1),
+                PAST_DATE,
                 FUTURE_DATE,
                 10,
                 "PERCENTAGE"
@@ -106,11 +104,10 @@ class VoucherControllerTest {
         assertEquals("ACTIVE", voucherResponse.status());
     }
 
-
     @Test
     @DisplayName("Response should show NOT_YET_VALID status when validFrom is in future")
     void responseShouldShowNotYetValidStatus() {
-        testVoucher.setValidFrom(TODAY.plusDays(1));
+        testVoucher.setValidFrom(NOW.plus(1, ChronoUnit.DAYS));
         when(voucherService.getAllVouchers()).thenReturn(List.of(testVoucher));
 
         ResponseEntity<List<VoucherResponse>> response = voucherController.list();
