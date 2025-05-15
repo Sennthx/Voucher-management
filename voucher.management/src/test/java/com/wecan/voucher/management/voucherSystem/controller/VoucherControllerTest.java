@@ -114,7 +114,6 @@ class VoucherControllerTest {
         when(voucherService.getAllVouchers()).thenReturn(List.of(testVoucher));
 
         ResponseEntity<List<VoucherResponse>> response = voucherController.list();
-
         assertEquals("NOT_YET_VALID", response.getBody().get(0).status());
     }
 
@@ -125,7 +124,6 @@ class VoucherControllerTest {
         when(voucherService.getAllVouchers()).thenReturn(List.of(testVoucher));
 
         ResponseEntity<List<VoucherResponse>> response = voucherController.list();
-
         assertEquals("EXPIRED", response.getBody().get(0).status());
     }
 
@@ -137,7 +135,6 @@ class VoucherControllerTest {
         when(voucherService.getAllVouchers()).thenReturn(List.of(testVoucher));
 
         ResponseEntity<List<VoucherResponse>> response = voucherController.list();
-
         assertEquals("ACTIVE", response.getBody().get(0).status());
     }
 

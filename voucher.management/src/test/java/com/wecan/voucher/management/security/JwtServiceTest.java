@@ -58,7 +58,6 @@ class JwtServiceTest {
         String token = jwtService.generateToken("testUser");
 
         try { Thread.sleep(2); } catch (InterruptedException ignored) {}
-
         assertThrows(RuntimeException.class, () -> jwtService.validateToken(token));
     }
 

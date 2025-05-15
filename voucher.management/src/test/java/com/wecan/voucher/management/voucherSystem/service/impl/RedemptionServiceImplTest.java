@@ -40,7 +40,6 @@ class RedemptionServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Create a base valid voucher
         validVoucher = new Voucher();
         validVoucher.setId(1L);
         validVoucher.setCode(TEST_VOUCHER_CODE);

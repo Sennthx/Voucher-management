@@ -32,7 +32,6 @@ class VoucherServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Base valid voucher that tests can modify
         baseVoucher = new Voucher();
         baseVoucher.setCode("TEST123");
         baseVoucher.setType(VoucherType.SINGLE);
